@@ -12,13 +12,13 @@
 
 # 🕰️ Osmanlı Zaman Pusulası (Dual-Time Ottoman Clock)
 
-Bu proje, geç Osmanlı döneminin estetik anlayışını modern web teknolojileriyle harmanlayarak, kullanıcıya aynı anda hem **Alafranga (Modern/Zevalî)** hem de **Alaturka (Geleneksel/Gurubî)** zamanı gösteren interaktif bir dijital saat arayüzüdür.
+Bu proje, geç Osmanlı döneminin estetik anlayışını modern web teknolojileriyle harmanlayarak, kullanıcıya aynı anda hem **Alafranga (Avrupa/Zevalî)** hem de **Alaturka (Ezanî/Gurubî)** zamanı gösteren interaktif bir dijital saat arayüzüdür.
 
 ## 📖 Bir İmtiyazın Hikayesi: Johann Meyer'in İzinde
 
 Bu projenin temeli, 19. yüzyılın en büyük mühendislik meydan okumalarından birine dayanmaktadır. 
 
-Sultan II. Abdülhamid Han'ın hizmetindeki Alman saat ustası **Johann Meyer**, Avrupa'daki saat fabrikalarının "imkansız" dediği bir sorunu çözmek için 8 yılını feda etti: *Güneşin batışına göre kendini her gün otomatik olarak ayarlayan bir saat geliştirmek.*
+Sultan II. Abdülhamid Han'ın hizmetinde sarayda görevli Alman saat ustası **Johann Meyer**, Avrupa'daki saat fabrikalarının "imkansız" dediği bir sorunu çözmek için 8 yılını feda etti: *Güneşin batışına göre kendini her gün otomatik olarak ayarlayan bir saat geliştirmek.*
 
 1886 yılında Meyer, bu devrim niteliğindeki "Ezanî Saat" mekanizmasını tamamlayarak Sultan'a takdim etti. Meyer, saati sunarken şu tarihi sözleri not düşmüştür:
 > "Avrupa'daki saat fabrikatörleri zamanı alaturka olarak göstermek için kendi kendine ayar edilir bir saat imalinin olanaksız olduğunu beyan etmişler iken, bendeniz sekiz sene bu husus hakkında düşünüp uğraştıktan sonra... her gün güneşin batışına bağlı olarak kendi kendine ayar edilir bir saat imaline muvaffak oldum."
@@ -30,7 +30,7 @@ Bu dijital uygulama, Meyer'in meşakkatle vücuda getirdiği o mekanik dehanın,
 - **Çift Zamanlı Gösterim:** Aynı ekranda modern ve geleneksel saati eşzamanlı takip edebilme.
 - **Dinamik Alaturka Zamanı:** Namaz vakitleri API'si kullanılarak o günün Akşam Ezanı (güneş batışı) vakti otomatik çekilir ve Alaturka saat tam o an `12:00` olacak şekilde matematiksel olarak hizalanır.
 - **Tarihi Estetik:** Rumi desenler, İznik çinisi motifleri ve altın varak görünümlü CSS tasarımları.
-- **Osmanlıca Kadran:** Alaturka saat yüzünde döneme uygun olarak Osmanlıca (Arap) rakamları (١, ٢, ٣...) kullanılmıştır.
+- **Osmanlıca Kadran:** Alaturka saat yüzünde döneme uygun olarak Osmanlıca rakamlar (١, ٢, ٣...) kullanılmıştır.
 - **Responsive Tasarım:** Masaüstü ekranlarda yan yana ihtişamlı bir görünüm sunarken, mobil cihazlarda dikey (alt alta) düzene geçerek kusursuz bir kullanıcı deneyimi (UX) sağlar.
 
 ## 🚀 Kullanılan Teknolojiler
@@ -52,12 +52,12 @@ Bu proje saf (vanilla) web teknolojileri ile inşa edilmiştir.
 
    Geliştirici İmzası
 Plaintext
-        _____       _                                
+_____       _                                
        / ____|     | |                               
       | (___  _   _| | ___ _   _ _ __ ___   __ _ _ __  
        \___ \| | | | |/ _ \ | | | '_ ` _ \ / _` | '_ \ 
        ____) | |_| | |  __/ |_| | | | | | | (_| | | | |
       |_____/ \__,_|_|\___|\__, |_| |_| |_|\__,_|_| |_|
                             __/ |                      
-                           |___/                       
+                           |___/                   
 Suleyman Cetin tarafından titizlikle tasarlanmıştır.
