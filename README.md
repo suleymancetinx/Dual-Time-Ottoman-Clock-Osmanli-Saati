@@ -1,9 +1,9 @@
 <div align="center">
-  <img src="https://readme-typing-svg.herokuapp.com/?font=Orbitron&weight=700&size=35&center=true&vCenter=true&width=600&height=80&color=1572B6&lines=Osmanlı+Zaman+Pusulası;Dual-Time+Ottoman+Clock;Inspired+by+Johann+Meyer" alt="Typing Greeting">
+  <img src="https://readme-typing-svg.herokuapp.com/?font=Orbitron&weight=700&size=35&center=true&vCenter=true&width=600&height=80&color=1572B6&lines=Osmanli+Zaman+Pusulasi;Dual-Time+Ottoman+Clock;Inspired+by+Johann+Meyer" alt="Typing Greeting">
 </div>
 
 <div align="center">
-  <a href="https://suleymancetinx.github.io/osmanli-zaman-pusulasi/" target="_blank">
+  <a href="https://suleymancetinx.github.io/Dual-Time-Ottoman-Clock-Osmanli-Saati/" target="_blank">
     <img alt="Live Demo" src="https://img.shields.io/badge/Canli_Deneyim-Goster-1572B6?style=for-the-badge&logo=google-chrome&logoColor=white">
   </a>
 </div>
@@ -46,18 +46,15 @@ Bu proje saf (vanilla) web teknolojileri ile inşa edilmiştir.
 
 1. Projeyi bilgisayarınıza klonlayın:
    ```bash
-   git clone [https://github.com/suleymancetinx/osmanli-zaman-pusulasi.git](https://github.com/suleymancetinx/osmanli-zaman-pusulasi.git)
-
+   git clone [https://github.com/suleymancetinx/Dual-Time-Ottoman-Clock-Osmanli-Saati.git](https://github.com/suleymancetinx/Dual-Time-Ottoman-Clock-Osmanli-Saati.git)
 2. index.html dosyasını tarayıcınızda açın.
 
-   Geliştirici İmzası
-Plaintext
-_____       _                                
+   _____       _                                
        / ____|     | |                               
       | (___  _   _| | ___ _   _ _ __ ___   __ _ _ __  
        \___ \| | | | |/ _ \ | | | '_ ` _ \ / _` | '_ \ 
        ____) | |_| | |  __/ |_| | | | | | | (_| | | | |
       |_____/ \__,_|_|\___|\__, |_| |_| |_|\__,_|_| |_|
                             __/ |                      
-                           |___/                   
-Suleyman Cetin tarafından titizlikle tasarlanmıştır.
+                           |___/
+   Suleyman Cetin tarafından titizlikle tasarlanmıştır.
