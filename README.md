@@ -49,7 +49,7 @@ Bu proje saf (vanilla) web teknolojileri ile inşa edilmiştir.
    git clone [https://github.com/suleymancetinx/Dual-Time-Ottoman-Clock-Osmanli-Saati.git](https://github.com/suleymancetinx/Dual-Time-Ottoman-Clock-Osmanli-Saati.git)
 2. index.html dosyasını tarayıcınızda açın.
 
-   _____       _                                
+_____       _                                
        / ____|     | |                               
       | (___  _   _| | ___ _   _ _ __ ___   __ _ _ __  
        \___ \| | | | |/ _ \ | | | '_ ` _ \ / _` | '_ \ 
