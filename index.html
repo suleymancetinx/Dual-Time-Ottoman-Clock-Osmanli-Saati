@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Osmanlı Zaman Pusulası</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold-dark:   #8b6914;
+      --gold-mid:    #c9a227;
+      --gold-light:  #f0d060;
+      --cream:       #f5edd8;
+      --cream-dark:  #e8d5a8;
+      --brown-deep:  #3d1c02;
+      --brown-mid:   #7a5c28;
+      --brown-light: #8b4513;
+      --red-hand:    #b8292e;
+      --font-serif:  'Cormorant Garamond', serif;
+      --font-arabic: 'Amiri', serif;
+    }
+
+    body {
+      font-family: var(--font-serif);
+      min-height: 100vh;
+      background:
+        radial-gradient(ellipse at 50% 0%,   rgba(180,140,60,.12) 0%, transparent 60%),
+        radial-gradient(ellipse at 20% 80%,  rgba(140,100,30,.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%,  rgba(160,110,40,.07) 0%, transparent 50%),
+        linear-gradient(160deg, #f5edd8 0%, #ede0c0 40%, #e8d5a8 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 2.5rem 1rem 3rem;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* ── Full-page Rumi pattern ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cg fill='none' stroke='%238b6914' stroke-width='.8'%3E%3Cpolygon points='60,6 114,33 114,87 60,114 6,87 6,33'/%3E%3Cpolygon points='60,20 98,40 98,80 60,100 22,80 22,40'/%3E%3Ccircle cx='60' cy='60' r='18'/%3E%3Cline x1='60' y1='6' x2='60' y2='114'/%3E%3Cline x1='6' y1='60' x2='114' y2='60'/%3E%3Cline x1='16.7' y1='16.7' x2='103.3' y2='103.3'/%3E%3Cline x1='103.3' y1='16.7' x2='16.7' y2='103.3'/%3E%3C/g%3E%3C/svg%3E");
+      background-size: 120px 120px;
+      opacity: .04;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page { position: relative; z-index: 1; width: 100%; max-width: 900px; display: flex; flex-direction: column; align-items: center; }
+
+    /* ── Header ── */
+    header { text-align: center; margin-bottom: 2.5rem; width: 100%; }
+
+    .dots { display: flex; justify-content: center; gap: .45rem; margin-bottom: 1rem; }
+    .dot  { width: 6px; height: 6px; border-radius: 50%; background: var(--gold-mid); }
+
+    h1 {
+      font-family: var(--font-arabic);
+      font-size: clamp(2.2rem, 7vw, 3.8rem);
+      font-weight: 700;
+      color: #6b2d0a;
+      letter-spacing: .05em;
+      line-height: 1.2;
+      text-shadow: 0 2px 8px rgba(80,40,10,.15);
+      margin-bottom: .25rem;
+    }
+    h2 {
+      font-size: clamp(1.1rem, 3vw, 1.6rem);
+      font-weight: 600;
+      color: rgba(90,55,20,.75);
+      letter-spacing: .12em;
+      margin-bottom: .9rem;
+    }
+    .sub-header {
+      display: flex; align-items: center; gap: .6rem; justify-content: center;
+    }
+    .sub-header::before, .sub-header::after {
+      content: ''; flex: 1; max-width: 120px; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-mid), transparent);
+    }
+    .sub-header span { font-size: .85rem; letter-spacing: .25em; color: rgba(100,70,25,.6); }
+
+    /* ── Clocks row ── */
+    .clocks-row {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+
+    .clock-wrap { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+
+    /* ── Gold frame ── */
+    .gold-ring {
+      border-radius: 50%;
+      padding: 10px;
+      background: conic-gradient(from 0deg, #8b6914 0%, #c9a227 15%, #f0d060 30%, #f5d855 45%, #c9a227 50%, #8b6914 60%, #c9a227 70%, #f0d060 80%, #c9a227 90%, #8b6914 100%);
+      box-shadow:
+        0 0 0 2px #8b6914,
+        0 0 20px rgba(200,160,40,.4),
+        0 8px 32px rgba(80,50,10,.4);
+    }
+
+    canvas {
+      display: block;
+      border-radius: 50%;
+    }
+
+    /* ── Clock label area ── */
+    .clock-label { text-align: center; }
+    .clock-sublabel {
+      font-size: .7rem;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      color: rgba(120,80,30,.65);
+      margin-bottom: .25rem;
+    }
+    .clock-digital {
+      font-size: 1.55rem;
+      font-weight: 700;
+      color: #5a2a06;
+      letter-spacing: .14em;
+    }
+    .clock-name {
+      font-size: 1rem;
+      font-weight: 600;
+      color: rgba(100,65,20,.6);
+      letter-spacing: .1em;
+      margin-top: .2rem;
+    }
+    .clock-status {
+      font-size: .75rem;
+      color: rgba(120,80,30,.5);
+      margin-top: .2rem;
+    }
+
+    /* ── Separator ── */
+    .sep {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .75rem;
+    }
+    .sep-line { width: 1px; height: 100px; background: linear-gradient(to bottom, transparent, rgba(180,140,60,.3), transparent); }
+    .sep-hex { opacity: .7; }
+    @media (max-width: 600px) { .sep { display: none; } }
+
+    /* ── Ihtiyat panel ── */
+    .panel {
+      margin-top: 2rem;
+      width: 100%;
+      max-width: 360px;
+      background: rgba(245,232,196,.55);
+      border: 1px solid rgba(180,140,60,.2);
+      border-radius: 1rem;
+      padding: 1.25rem 1.5rem;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 24px rgba(80,50,10,.08);
+      text-align: center;
+    }
+    .panel-sup { font-size: .65rem; letter-spacing: .24em; text-transform: uppercase; color: rgba(120,80,30,.6); margin-bottom: .2rem; }
+    .panel-title { font-size: 1rem; font-weight: 600; color: #5a2a06; letter-spacing: .07em; margin-bottom: 1rem; }
+
+    .ihtiyat-btns { display: flex; gap: .5rem; justify-content: center; flex-wrap: wrap; }
+    .ihtiyat-btn {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(180,140,60,.3);
+      background: rgba(230,210,170,.6);
+      color: var(--brown-mid);
+      font-family: var(--font-serif);
+      font-size: .95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform .15s, box-shadow .15s, background .15s, border-color .15s;
+      letter-spacing: .04em;
+    }
+    .ihtiyat-btn:hover { transform: scale(1.05); }
+    .ihtiyat-btn.active {
+      background: conic-gradient(from 0deg, #8b6914 0%, #c9a227 30%, #f0d060 50%, #c9a227 70%, #8b6914 100%);
+      border: 2px solid var(--gold-dark);
+      color: var(--brown-deep);
+      transform: scale(1.1);
+      box-shadow: 0 2px 12px rgba(180,140,60,.4), inset 0 1px 2px rgba(255,240,180,.4);
+    }
+    .panel-note { font-size: .75rem; color: rgba(120,80,30,.5); margin-top: .75rem; }
+
+    /* ── Info box ── */
+    .info-box {
+      margin-top: 1rem;
+      width: 100%;
+      max-width: 480px;
+      background: rgba(245,232,196,.55);
+      border: 1px solid rgba(180,140,60,.2);
+      border-radius: 1rem;
+      padding: 1.1rem 1.4rem;
+      box-shadow: 0 4px 24px rgba(80,50,10,.08);
+      font-size: .97rem;
+      line-height: 1.65;
+      color: rgba(100,65,20,.75);
+      text-align: center;
+    }
+    .info-box strong { color: var(--brown-light); }
+
+    /* ── Footer ── */
+    footer { margin-top: 1.75rem; text-align: center; }
+    footer p { font-size: .72rem; letter-spacing: .25em; color: rgba(120,80,30,.4); }
+  </style>
+</head>
+<body>
+<div class="page" role="main">
+
+  <!-- Header -->
+  <header>
+    <div class="dots" aria-hidden="true">
+      <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+    </div>
+    <h1 aria-label="Osmanlı Zaman Pusulası">عثمانلى زمان پوصولاسى</h1>
+    <h2>Osmanlı Zaman Pusulası</h2>
+    <div class="sub-header">
+      <span>İstanbul · سنة ١٤٤٦</span>
+    </div>
+  </header>
+
+  <!-- Clocks -->
+  <div class="clocks-row" aria-label="Saat göstergeleri">
+
+    <!-- Alafranga -->
+    <div class="clock-wrap" role="region" aria-label="Alafranga (modern) saat">
+      <div class="gold-ring">
+        <canvas id="canvasAlafranga" width="260" height="260" aria-hidden="true"></canvas>
+      </div>
+      <div class="clock-label">
+        <div class="clock-sublabel">Zevali · Avrupai Saat</div>
+        <div class="clock-digital" id="digitalAlafranga" aria-live="polite">--:--:--</div>
+        <div class="clock-name">Alafranga</div>
+      </div>
+    </div>
+
+    <!-- Separator -->
+    <div class="sep" aria-hidden="true">
+      <div class="sep-line"></div>
+      <svg class="sep-hex" width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="14,1 27,7 27,21 14,27 1,21 1,7" fill="none" stroke="#c9a227" stroke-width="1.2"/>
+        <circle cx="14" cy="14" r="5" fill="none" stroke="#c9a227" stroke-width="1"/>
+        <circle cx="14" cy="14" r="2" fill="#c9a227"/>
+      </svg>
+      <div class="sep-line"></div>
+    </div>
+
+    <!-- Alaturka -->
+    <div class="clock-wrap" role="region" aria-label="Alaturka (Osmanlı ezani) saat. Gün akşam ezanıyla başlar ve o an 12:00'yi gösterir.">
+      <div class="gold-ring">
+        <canvas id="canvasAlaturka" width="260" height="260" aria-hidden="true"></canvas>
+      </div>
+      <div class="clock-label">
+        <div class="clock-sublabel">Ezani · Osmanlı Saati</div>
+        <div class="clock-digital" id="digitalAlaturka" aria-live="polite">--:--:--</div>
+        <div class="clock-name">Alaturka</div>
+        <div class="clock-status" id="statusAlaturka">Akşam vakti yükleniyor...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ihtiyat panel -->
+  <div class="panel" role="region" aria-label="İhtiyat dakikası ayarı">
+    <div class="panel-sup">Temkinli Vakit</div>
+    <div class="panel-title">İhtiyat Dakikası</div>
+    <div class="ihtiyat-btns" role="group" aria-label="İhtiyat seçenekleri" id="ihtiyatBtns"></div>
+    <p class="panel-note" id="ihtiyatNote"></p>
+  </div>
+
+  <!-- Info -->
+  <div class="info-box">
+    <strong>Alaturka (Ezani) Saat:</strong> Osmanlı geleneğinde gün, güneşin batışıyla —
+    Akşam Ezanı vaktiyle — başlar. O an saat tam <em>12:00</em>'yi gösterir.
+    Böylece her günün akşam ezanı, zamanın sıfırlandığı andır.
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="dots" aria-hidden="true" style="margin-bottom:.5rem"><span class="dot"></span></div>
+    <p>İstanbul Akşam Vakitleri</p>
+  </footer>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ── Constants ── */
+  const ARABIC = ['١٢','١','٢','٣','٤','٥','٦','٧','٨','٩','١٠','١١'];
+  const LATIN  = ['XII','I','II','III','IV','V','VI','VII','VIII','IX','X','XI'];
+  const IHTIYAT_OPTIONS = [0, 2, 5, 8, 10, 15];
+
+  /* ── State ── */
+  let ihtiyat = 5;
+  let rawMaghribSeconds = null;   // seconds since midnight (no ihtiyat)
+  let maghribTotalSeconds = null; // rawMaghribSeconds + ihtiyat*60 (mod 86400)
+
+  /* ── Canvas setup ── */
+  const cvA = document.getElementById('canvasAlafranga');
+  const cvT = document.getElementById('canvasAlaturka');
+  const ctxA = cvA.getContext('2d');
+  const ctxT = cvT.getContext('2d');
+  const SIZE = cvA.width;       // 260
+  const R    = SIZE / 2;        // 130
+
+  /* ── Draw one clock face ── */
+  function drawClock(ctx, angles, numerals, isArabic) {
+    ctx.clearRect(0, 0, SIZE, SIZE);
+
+    /* Face background */
+    const grad = ctx.createRadialGradient(R * 0.85, R * 0.7, 0, R, R, R);
+    grad.addColorStop(0,   '#fdf6e3');
+    grad.addColorStop(0.4, '#f5e8c4');
+    grad.addColorStop(1,   '#e8d5a0');
+    ctx.beginPath();
+    ctx.arc(R, R, R, 0, Math.PI * 2);
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    /* Inset shadow (fake) */
+    const shadow = ctx.createRadialGradient(R, R, R * 0.85, R, R, R);
+    shadow.addColorStop(0, 'rgba(80,50,10,0)');
+    shadow.addColorStop(1, 'rgba(80,50,10,0.16)');
+    ctx.beginPath();
+    ctx.arc(R, R, R, 0, Math.PI * 2);
+    ctx.fillStyle = shadow;
+    ctx.fill();
+
+    /* Outer decorative circle */
+    ctx.beginPath();
+    ctx.arc(R, R, R * 0.95, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(200,160,40,0.5)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    /* Rumi pattern (simple repeated hexagon) — lightweight version */
+    ctx.save();
+    ctx.globalAlpha = 0.055;
+    ctx.strokeStyle = '#8b6914';
+    ctx.lineWidth = 0.5;
+    for (let i = 0; i < 12; i++) {
+      const a = (i / 12) * Math.PI * 2;
+      ctx.beginPath();
+      ctx.moveTo(R, R);
+      ctx.lineTo(R + Math.cos(a) * R * 0.9, R + Math.sin(a) * R * 0.9);
+      ctx.stroke();
+    }
+    for (let cr = 0.25; cr <= 0.85; cr += 0.2) {
+      ctx.beginPath();
+      ctx.arc(R, R, R * cr, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    /* Tick marks */
+    for (let i = 0; i < 60; i++) {
+      const a   = (i / 60) * Math.PI * 2 - Math.PI / 2;
+      const maj = i % 5 === 0;
+      const r1  = R * 0.93;
+      const r2  = maj ? R * 0.85 : R * 0.89;
+      ctx.beginPath();
+      ctx.moveTo(R + Math.cos(a) * r1, R + Math.sin(a) * r1);
+      ctx.lineTo(R + Math.cos(a) * r2, R + Math.sin(a) * r2);
+      ctx.strokeStyle = maj ? 'rgba(139,105,20,0.9)' : 'rgba(200,162,40,0.5)';
+      ctx.lineWidth   = maj ? 2 : 0.8;
+      ctx.stroke();
+    }
+
+    /* Numerals */
+    const numR = R * 0.78;
+    ctx.textAlign    = 'center';
+    ctx.textBaseline = 'middle';
+    for (let i = 0; i < 12; i++) {
+      const a = (i / 12) * Math.PI * 2 - Math.PI / 2;
+      const x = R + Math.cos(a) * numR;
+      const y = R + Math.sin(a) * numR;
+      ctx.fillStyle = '#3d2408';
+      ctx.font      = `600 ${Math.round(R * 0.135)}px ${isArabic ? "'Amiri', serif" : "'Cormorant Garamond', serif"}`;
+      ctx.fillText(numerals[i], x, y);
+    }
+
+    /* ── Hands ── */
+    function hand(angleDeg, length, width, color, shadow) {
+      const a     = (angleDeg - 90) * Math.PI / 180;
+      const backL = length * 0.18;
+      ctx.save();
+      if (shadow) {
+        ctx.shadowColor   = 'rgba(40,20,5,0.35)';
+        ctx.shadowBlur    = 4;
+        ctx.shadowOffsetX = 2;
+        ctx.shadowOffsetY = 2;
+      }
+      ctx.beginPath();
+      ctx.moveTo(R - Math.cos(a) * backL, R - Math.sin(a) * backL);
+      ctx.lineTo(R + Math.cos(a) * length, R + Math.sin(a) * length);
+      ctx.strokeStyle = color;
+      ctx.lineWidth   = width;
+      ctx.lineCap     = 'round';
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    hand(angles.hour,   R * 0.52, R * 0.055, '#3d2408', true);
+    hand(angles.minute, R * 0.70, R * 0.035, '#3d2408', true);
+    hand(angles.second, R * 0.78, R * 0.018, '#b8292e', false);
+
+    /* Center cap */
+    ctx.beginPath();
+    ctx.arc(R, R, R * 0.04, 0, Math.PI * 2);
+    ctx.fillStyle = '#8b6914';
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(R, R, R * 0.025, 0, Math.PI * 2);
+    ctx.fillStyle = '#f0d060';
+    ctx.fill();
+  }
+
+  /* ── Angle calculators ── */
+  function alafrAngles(d) {
+    const h  = d.getHours() % 12;
+    const m  = d.getMinutes();
+    const s  = d.getSeconds();
+    const ms = d.getMilliseconds();
+    const ss = s + ms / 1000;
+    const mm = m + ss / 60;
+    const hh = h + mm / 60;
+    return { hour: hh * 30, minute: mm * 6, second: ss * 6 };
+  }
+
+  function alaturkaAngles(d) {
+    if (maghribTotalSeconds === null) return { hour: 0, minute: 0, second: 0 };
+    const cur = d.getHours() * 3600 + d.getMinutes() * 60 + d.getSeconds() + d.getMilliseconds() / 1000;
+    let elapsed = cur - maghribTotalSeconds;
+    if (elapsed < 0) elapsed += 86400;
+    elapsed = elapsed % 43200;
+    const h = Math.floor(elapsed / 3600);
+    const m = Math.floor((elapsed % 3600) / 60);
+    const s = elapsed % 60;
+    return {
+      hour:   (h + (m + s / 60) / 60) * 30,
+      minute: (m + s / 60) * 6,
+      second: s * 6,
+    };
+  }
+
+  /* ── Digital time strings ── */
+  function pad(n) { return String(Math.floor(n)).padStart(2, '0'); }
+
+  function alafrDigital(d) {
+    return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+  }
+
+  function alaturkaDigital(d) {
+    if (maghribTotalSeconds === null) return '--:--:--';
+    const cur = d.getHours() * 3600 + d.getMinutes() * 60 + d.getSeconds();
+    let elapsed = cur - maghribTotalSeconds;
+    if (elapsed < 0) elapsed += 86400;
+    elapsed = elapsed % 43200;
+    const h = Math.floor(elapsed / 3600) || 12;
+    const m = Math.floor((elapsed % 3600) / 60);
+    const s = Math.floor(elapsed % 60);
+    return `${pad(h)}:${pad(m)}:${pad(s)}`;
+  }
+
+  /* ── Apply ihtiyat ── */
+  function applyIhtiyat() {
+    if (rawMaghribSeconds === null) return;
+    maghribTotalSeconds = (rawMaghribSeconds + ihtiyat * 60) % 86400;
+    updateStatusLine();
+  }
+
+  function updateStatusLine() {
+    const h = Math.floor(maghribTotalSeconds / 3600);
+    const m = Math.floor((maghribTotalSeconds % 3600) / 60);
+    const suffix = ihtiyat > 0 ? ` (+${ihtiyat} dk ihtiyat)` : '';
+    document.getElementById('statusAlaturka').textContent =
+      `Akşam Ezanı: ${pad(h)}:${pad(m)}${suffix}`;
+  }
+
+  /* ── Ihtiyat buttons ── */
+  const btnsContainer = document.getElementById('ihtiyatBtns');
+  const noteEl        = document.getElementById('ihtiyatNote');
+
+  IHTIYAT_OPTIONS.forEach(val => {
+    const btn = document.createElement('button');
+    btn.className   = 'ihtiyat-btn' + (val === ihtiyat ? ' active' : '');
+    btn.textContent = val === 0 ? '—' : `+${val}`;
+    btn.setAttribute('aria-pressed', val === ihtiyat ? 'true' : 'false');
+    btn.setAttribute('aria-label', `${val} dakika ihtiyat`);
+    btn.dataset.val = val;
+    btn.addEventListener('click', () => {
+      ihtiyat = val;
+      document.querySelectorAll('.ihtiyat-btn').forEach(b => {
+        const active = parseInt(b.dataset.val) === ihtiyat;
+        b.classList.toggle('active', active);
+        b.setAttribute('aria-pressed', active ? 'true' : 'false');
+      });
+      noteEl.textContent = ihtiyat === 0
+        ? 'İhtiyat uygulanmıyor'
+        : `Akşam vaktine ${ihtiyat} dakika eklenmektedir`;
+      applyIhtiyat();
+    });
+    btnsContainer.appendChild(btn);
+  });
+  noteEl.textContent = `Akşam vaktine ${ihtiyat} dakika eklenmektedir`;
+
+  /* ── Fetch Maghrib ── */
+  async function fetchMaghrib() {
+    try {
+      const d       = new Date();
+      const dateStr = `${pad(d.getDate())}-${pad(d.getMonth() + 1)}-${d.getFullYear()}`;
+      const url     = `https://api.aladhan.com/v1/timingsByCity?city=Istanbul&country=Turkey&method=13&date=${dateStr}`;
+      console.info('[OttomanClock] Fetching Maghrib ...');
+      const res  = await fetch(url);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      const str  = data?.data?.timings?.Maghrib;
+      if (!str) throw new Error('Maghrib verisi bulunamadı');
+      const [h, m]       = str.split(':').map(Number);
+      rawMaghribSeconds  = h * 3600 + m * 60;
+      console.info(`[OttomanClock] Ham Maghrib: ${str}`);
+      applyIhtiyat();
+    } catch (e) {
+      console.error('[OttomanClock] Hata:', e.message);
+      rawMaghribSeconds  = 20 * 3600 + 30 * 60;  // fallback 20:30
+      applyIhtiyat();
+      document.getElementById('statusAlaturka').textContent = 'Tahmini akşam vakti (20:30)';
+    }
+  }
+
+  fetchMaghrib();
+
+  /* ── Tick loop ── */
+  function tick() {
+    const now = new Date();
+
+    drawClock(ctxA, alafrAngles(now),    LATIN,  false);
+    drawClock(ctxT, alaturkaAngles(now), ARABIC, true);
+
+    document.getElementById('digitalAlafranga').textContent = alafrDigital(now);
+    document.getElementById('digitalAlaturka').textContent  = alaturkaDigital(now);
+
+    requestAnimationFrame(tick);
+  }
+
+  requestAnimationFrame(tick);
+
+  /* ── Responsive canvas resize ── */
+  function resize() {
+    const maxR = Math.min(window.innerWidth * 0.38, 260);
+    const size = Math.max(180, maxR);
+    [cvA, cvT].forEach(cv => {
+      cv.width  = size;
+      cv.height = size;
+    });
+  }
+  window.addEventListener('resize', resize);
+  resize();
+})();
+</script>
+</body>
+</html>
