@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://readme-typing-svg.herokuapp.com/?font=Orbitron&weight=700&size=35&center=true&vCenter=true&width=600&height=80&color=1572B6&lines=Osmanli+Zaman+Pusulasi;Dual-Time+Ottoman+Clock;Inspired+by+Johann+Meyer" alt="Typing Greeting">
+  <img src="https://readme-typing-svg.herokuapp.com/?font=Orbitron&weight=700&size=35&center=true&vCenter=true&width=600&height=80&color=1572B6&lines=Osmanlı+Zaman+Pusulası;Dual-Time+Ottoman+Clock;Inspired+by+Johann+Meyer" alt="Typing Greeting">
 </div>
 
 <div align="center">
